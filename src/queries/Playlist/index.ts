@@ -13,3 +13,10 @@ export const createPlaylist = async (
     },
   });
 };
+
+export const updatePlaylistName = async (playlistId: string, name: string) => {
+  await prisma.playlist.update({
+    where: { id: playlistId },
+    data: { name: name },
+  });
+};
