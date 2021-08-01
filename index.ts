@@ -1,27 +1,15 @@
-import { Prisma } from "@prisma/client";
-import prisma from "./prisma";
-import { createUser } from "./src/queries/User";
+import Fastify, { FastifyInstance, fastify } from "fastify";
 
-async function main() {
-  const newUser: Prisma.UserCreateInput = {
-    firstName: "Ada",
-    lastName: "Lovelace",
-    email: "ada@lovelace.com",
-    spotifyUrl: "open.spotify.com/ada",
-  };
-  createUser(newUser);
+const server: FastifyInstance = Fastify();
 
-  const findAllUsers = await prisma.user.findMany();
-  console.log(findAllUsers);
-  //   const userId: string = findUser?.id!;
+server.get("/", async (request, reply) => {
+  return "Oh Hey there!\n";
+});
 
-  //   await prisma.playlist.create({
-  //     data: {
-  //       name: "Jazz",
-  //       url: "open.spotify.com/playlists/345",
-  //       userId: userId,
-  //     },
-  //   });
-}
-
-main();
+server.listen(8080, (err, address) => {
+  if (err) {
+    console.error(err);
+    process.exit(1);
+  }
+  console.log(`Server listening at ${address}`);
+});
