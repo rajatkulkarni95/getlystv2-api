@@ -13,8 +13,9 @@ generator client {
 model User {
   id String @id @default(cuid())
   email String @unique
-  firstName String
-  lastName String
+  firstName String?
+  lastName String?
+  spotifyUsername String @unique
   spotifyUrl String
   playlists Playlist[]
 }
