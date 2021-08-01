@@ -1,42 +1,27 @@
-import { PrismaClient } from "@prisma/client";
-
-const prisma = new PrismaClient();
+import { Prisma } from "@prisma/client";
+import prisma from "./prisma";
+import { createUser } from "./src/queries/User";
 
 async function main() {
-  //   await prisma.user.create({
+  const newUser: Prisma.UserCreateInput = {
+    firstName: "Ada",
+    lastName: "Lovelace",
+    email: "ada@lovelace.com",
+    spotifyUrl: "open.spotify.com/ada",
+  };
+  createUser(newUser);
+
+  const findAllUsers = await prisma.user.findMany();
+  console.log(findAllUsers);
+  //   const userId: string = findUser?.id!;
+
+  //   await prisma.playlist.create({
   //     data: {
-  //       firstName: "Rajat",
-  //       lastName: "Kulkarni",
-  //       email: "rajat@gmail.com",
-  //       spotifyUrl: "open.spotify.com/rajat",
-  //       playlists: {
-  //         create: [
-  //           {
-  //             name: "Rock and Roll",
-  //             url: "open.spotify.com/playlist/12",
-  //           },
-  //         ],
-  //       },
+  //       name: "Jazz",
+  //       url: "open.spotify.com/playlists/345",
+  //       userId: userId,
   //     },
   //   });
-
-  const findUser = await prisma.user.findUnique({
-    where: { email: "rajat@gmail.com" },
-  });
-
-  const userId: string = findUser?.id!;
-
-  await prisma.playlist.create({
-    data: {
-      name: "Jazz",
-      url: "open.spotify.com/playlists/345",
-      userId: userId,
-    },
-  });
 }
 
-main()
-  .catch((e) => {
-    throw e;
-  })
-  .finally(async () => await prisma.$disconnect());
+main();
