@@ -1,5 +1,5 @@
 import prisma from "../../../prisma";
-import { Playlist, PlaylistDetails } from "../../types/playlist";
+import { Playlist, PlaylistDetails } from "../../@types/playlist";
 
 export const createPlaylist = async (
   playlistData: Playlist,
