@@ -1,5 +1,5 @@
 import { FastifyPluginAsync } from "fastify";
-import { createUser } from "../../../queries/User";
+import { createUser, fetchUser } from "../../../queries/User";
 
 interface ICreateUserBody {
   email: string;
@@ -7,7 +7,21 @@ interface ICreateUserBody {
   spotifyUsername: string;
 }
 
+interface IFetchUser {
+  email: string;
+}
+
 const users: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
+  fastify.get<{ Querystring: IFetchUser }>(
+    "/users",
+    async function (request, reply) {
+      const { email } = request.query;
+      const result = await fetchUser(email);
+
+      reply.code(200).send(result);
+    }
+  );
+
   fastify.post<{ Body: ICreateUserBody }>(
     "/users",
     async function (request, reply) {

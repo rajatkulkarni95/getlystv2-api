@@ -13,3 +13,17 @@ export const createUser = async (user: Prisma.UserCreateInput) => {
 
   return result;
 };
+
+// Fetch user based on email (since its a unique key) and return all data excluding playlist details
+export const fetchUser = async (email: string) => {
+  const result = await prisma.user.findUnique({
+    where: {
+      email: email,
+    },
+    include: {
+      playlists: true,
+    },
+  });
+
+  return result;
+};
