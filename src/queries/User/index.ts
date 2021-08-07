@@ -2,7 +2,7 @@ import { Prisma } from "@prisma/client";
 import prisma from "../../../prisma";
 
 export const createUser = async (user: Prisma.UserCreateInput) => {
-  await prisma.user.create({
+  const result = await prisma.user.create({
     data: {
       email: user.email,
       spotifyUrl: user.spotifyUrl,
@@ -10,4 +10,6 @@ export const createUser = async (user: Prisma.UserCreateInput) => {
       spotifyUsername: user.spotifyUsername,
     },
   });
+
+  return result;
 };
