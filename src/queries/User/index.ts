@@ -5,9 +5,9 @@ export const createUser = async (user: Prisma.UserCreateInput) => {
   const result = await prisma.user.create({
     data: {
       email: user.email,
-      spotifyUrl: user.spotifyUrl,
+      url: user.url,
       playlists: user.playlists,
-      spotifyUsername: user.spotifyUsername,
+      username: user.username,
     },
   });
 
