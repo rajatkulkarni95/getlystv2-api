@@ -1,27 +1,8 @@
+import { Prisma } from "@prisma/client";
 import prisma from "../../../prisma";
-import { Playlist, PlaylistDetails } from "../../@types/playlist";
+import { PlaylistDetails } from "../../@types/playlist";
 
-export const createPlaylist = async (
-  playlistData: Playlist,
-  userId: string
-) => {
-  await prisma.playlist.create({
-    data: {
-      name: playlistData.name,
-      url: playlistData.url,
-      userId: userId,
-    },
-  });
-};
-
-export const updatePlaylistName = async (playlistId: string, name: string) => {
-  await prisma.playlist.update({
-    where: { id: playlistId },
-    data: { name: name },
-  });
-};
-
-export const getPlaylistDetails = async (playlistId: string) => {
+export const fetchPlaylistDetails = async (playlistId: string) => {
   const playlistDetails = await prisma.playlist.findUnique({
     where: {
       id: playlistId,
@@ -33,6 +14,20 @@ export const getPlaylistDetails = async (playlistId: string) => {
   });
 
   return playlistDetails;
+};
+
+export const createPlaylist = async (
+  userId: string,
+  playlistData: Prisma.PlaylistCreateInput
+) => {
+  await prisma.playlist.create({
+    data: {
+      name: playlistData.name,
+      url: playlistData.url,
+      userId: userId,
+      details: playlistData.details,
+    },
+  });
 };
 
 export const createPlaylistDetails = async (
@@ -68,5 +63,12 @@ export const createPlaylistDetails = async (
       minValence: details.minValence,
       maxValence: details.maxValence,
     },
+  });
+};
+
+export const updatePlaylistName = async (playlistId: string, name: string) => {
+  await prisma.playlist.update({
+    where: { id: playlistId },
+    data: { name: name },
   });
 };
