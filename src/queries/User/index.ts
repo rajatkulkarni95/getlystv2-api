@@ -7,7 +7,8 @@ export const createUser = async (user: Prisma.UserCreateInput) => {
       email: user.email,
       url: user.url,
       playlists: user.playlists,
-      username: user.username,
+      id: user.id,
+      image: user.image,
     },
   });
 

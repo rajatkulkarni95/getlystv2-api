@@ -10,6 +10,8 @@ import {
 import { Buffer } from "buffer";
 import { spotifyAPIUrl, stateKey } from "../../../../constants/spotify";
 import { fetchSpotifyProfile } from "../../../../utils/spotifyProfile";
+import { createUser, fetchUser } from "../../../../queries/User";
+import { Prisma } from ".prisma/client";
 
 interface ICallbackQuery {
   code: string | null;
@@ -48,7 +50,22 @@ const callback: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
         const { access_token, refresh_token } = data;
         // fetch spotify profile to be sent to the client
         const spotifyProfile = await fetchSpotifyProfile(access_token);
+        const user = await fetchUser(spotifyProfile.email);
 
+        // If the user does not exist, create in the DB with details from the /me endpoint
+        // Once the login is done, we'd be getting the info about user from the DB rather than spotify
+        // TODO: Need to decide how updation of user in spotify takes place here
+        if (!user?.uuid) {
+          const payload: Prisma.UserCreateInput = {
+            email: spotifyProfile.email,
+            id: spotifyProfile.id,
+            url: spotifyProfile.external_urls.spotify,
+            image: spotifyProfile.images[0]?.url,
+          };
+          await createUser(payload);
+        }
+
+        // set it to a cookie for use on the client
         reply.cookie("spotifyProfile", JSON.stringify(spotifyProfile));
 
         reply.redirect(
