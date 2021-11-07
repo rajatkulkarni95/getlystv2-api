@@ -4,6 +4,6 @@ import fastifyCors, { FastifyCorsOptions } from "fastify-cors";
 export default fp<FastifyCorsOptions>(async (fastify) => {
   fastify.register(fastifyCors, {
     origin: "*",
-    methods: ["POST", "GET"],
+    methods: "GET,PUT,POST,DELETE,OPTIONS",
   });
 });

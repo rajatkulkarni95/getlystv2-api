@@ -9,6 +9,7 @@ import {
 } from "../../../../constants/env";
 import { Buffer } from "buffer";
 import { spotifyAPIUrl, stateKey } from "../../../../constants/spotify";
+import { fetchSpotifyProfile } from "../../../../utils/spotifyProfile";
 
 interface ICallbackQuery {
   code: string | null;
@@ -42,19 +43,23 @@ const callback: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
         redirect_uri: REDIRECT_URI,
       });
 
-      axios
-        .post(spotifyAPIUrl, body, config)
-        .then(({ data: { access_token, refresh_token } }) => {
-          reply.redirect(
-            `${FRONTEND_URI}#${qs.stringify({
-              access_token,
-              refresh_token,
-            })}`
-          );
-        })
-        .catch((error) => {
-          reply.redirect(`/#${qs.stringify({ error: "invalid_token" })}`);
-        });
+      try {
+        const { data } = await axios.post(spotifyAPIUrl, body, config);
+        const { access_token, refresh_token } = data;
+        // fetch spotify profile to be sent to the client
+        const spotifyProfile = await fetchSpotifyProfile(access_token);
+
+        reply.cookie("spotifyProfile", JSON.stringify(spotifyProfile));
+
+        reply.redirect(
+          `${FRONTEND_URI}#${qs.stringify({
+            access_token,
+            refresh_token,
+          })}`
+        );
+      } catch (error) {
+        reply.redirect(`/#${qs.stringify({ error: "invalid_token" })}`);
+      }
     }
   );
 };
