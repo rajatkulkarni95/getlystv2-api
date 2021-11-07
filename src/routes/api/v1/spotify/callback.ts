@@ -65,9 +65,6 @@ const callback: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
           await createUser(payload);
         }
 
-        // set it to a cookie for use on the client
-        reply.cookie("spotifyProfile", JSON.stringify(spotifyProfile));
-
         reply.redirect(
           `${FRONTEND_URI}#${qs.stringify({
             access_token,
