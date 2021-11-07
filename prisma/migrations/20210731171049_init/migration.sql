@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "Playlist" ALTER COLUMN "createdAt" SET DEFAULT CURRENT_TIMESTAMP;

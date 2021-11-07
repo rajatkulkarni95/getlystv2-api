@@ -11,18 +11,19 @@ generator client {
 }
 
 model User {
-  id String @id @default(cuid())
+  uuid String @id @default(cuid())
   email String @unique
-  username String @unique
   url String
   playlists Playlist[]
+  id String
+  image String
 }
 
 model Playlist {
-  id String @id @default(cuid())
+  uuid String @id @default(cuid())
   name String
   url String
-  createdBy User @relation(fields: [userId], references: [id])
+  createdBy User @relation(fields: [userId], references: [uuid])
   userId String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -30,8 +31,8 @@ model Playlist {
 }
 
 model PlaylistSettings {
-  id String @id @default(cuid())
-  playlist Playlist? @relation(fields: [playlistId], references: [id])
+  uuid String @id @default(cuid())
+  playlist Playlist? @relation(fields: [playlistId], references: [uuid])
   playlistId String
   limit Int
   genres String[]

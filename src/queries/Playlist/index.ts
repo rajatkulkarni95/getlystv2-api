@@ -5,7 +5,7 @@ import { PlaylistDetails } from "../../@types/playlist";
 export const fetchPlaylistDetails = async (playlistId: string) => {
   const playlistDetails = await prisma.playlist.findUnique({
     where: {
-      id: playlistId,
+      uuid: playlistId,
     },
     include: {
       details: true,
@@ -68,7 +68,7 @@ export const createPlaylistDetails = async (
 
 export const updatePlaylistName = async (playlistId: string, name: string) => {
   await prisma.playlist.update({
-    where: { id: playlistId },
+    where: { uuid: playlistId },
     data: { name: name },
   });
 };
