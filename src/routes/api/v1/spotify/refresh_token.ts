@@ -17,7 +17,7 @@ const refresh_token: FastifyPluginAsync = async (
   opts
 ): Promise<void> => {
   fastify.get<{ Querystring: IRefreshTokenQuery }>(
-    "/refresh_token",
+    "/refresh_token/:refresh_token",
     async function (request, reply) {
       const { refresh_token } = request.query;
       const buff = Buffer.from(`${SPOTIFY_CLIENT_ID}:${SPOTIFY_CLIENT_SECRET}`);
