@@ -44,6 +44,8 @@
     "start": "npm run build:ts && fastify start -l info dist/src/app.js",
     "build:ts": "tsc",
     "dev": "tsc && concurrently -k -p \"[{name}]\" -n \"TypeScript,App\" -c \"yellow.bold,cyan.bold\" \"tsc -w\" \"fastify start --ignore-watch=.ts$ -w -l info -P dist/src/app.js\"",
-    "dev-migrate": "prisma migrate dev --name init"
+    "migrate:dev": "prisma migrate dev --preview-feature",
+    "migrate:deploy": "prisma migrate deploy --preview-feature",
+    "migrate:status": "prisma migrate status --preview-feature"
   }
 }
